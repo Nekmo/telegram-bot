@@ -6,16 +6,21 @@ from telebot.types import InlineKeyboardMarkup
 from telegram_bot.crypt import encrypt
 
 
-button_last = 0
+last_module = None
+last_button = 0
 button_targets = {}
 button_targets_keys = {}
 
 
 def register_button_function(fn):
-    global button_last, button_targets
-    button_last += 1
-    button_targets[button_last] = fn
-    button_targets_keys[fn] = button_last
+    global last_button, button_targets, last_module
+    if last_module and fn.__module__ != last_module:
+        last_module += 100
+    if fn.__module__ != last_module:
+        last_module = fn.__module__
+    last_button += 1
+    button_targets[last_button] = fn
+    button_targets_keys[fn] = last_button
     return fn
 
 

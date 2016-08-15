@@ -11,13 +11,14 @@ class Registering(RegisteringMeta):
 class PluginBase(metaclass=Registering):
     def __init__(self, main):
         self.main = main
+        self.bot = main.bot
         self.register_button_targets()
 
     def set_handlers(self):
         pass
 
     def register_button_targets(self):
-        for name in self.methods_by_name:
+        for name in sorted(self.methods_by_name):
             register_button_function(getattr(self, name))
 
 

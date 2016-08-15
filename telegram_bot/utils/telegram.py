@@ -1,5 +1,7 @@
+import html
 import time
 
+from telegram_bot.utils.dicts import map_dict
 
 IGNORE_MESSAGES_OFFTIME = 60
 
@@ -23,3 +25,7 @@ def is_admin(bot, message):
         if admin.user.id == from_id:
             return True
     return False
+
+
+def escape_items(**d):
+    return map_dict(d, lambda x: x if isinstance(x, int) else html.escape(x))

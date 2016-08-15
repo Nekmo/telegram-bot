@@ -1,7 +1,6 @@
 import json
 
 import telebot
-from telebot import types
 
 from telegram_bot.crypt import decrypt
 from telegram_bot.plugins.admin import AdminPlugin
@@ -49,7 +48,7 @@ class BotBase(object):
             pass
         if isinstance(query.data, dict) and 'fn' in query.data:
             fn = get_button_function(query.data['fn'])
-            fn(**query.data['kw'] or {})
+            fn(query, **query.data['kw'] or {})
 
 
     def poll(self):
