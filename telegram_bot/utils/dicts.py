@@ -1,5 +1,11 @@
 
 
+class AttrDict(dict):
+    def __init__(self, *args, **kwargs):
+        super(AttrDict, self).__init__(*args, **kwargs)
+        self.__dict__ = self
+
+
 def remove_from_dict(d, removes, new_dict=False):
     if new_dict:
         d = dict(d)

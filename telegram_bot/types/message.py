@@ -1,9 +1,8 @@
 import telebot.types
-from telebot.types import Message as TelebotMessage
+from telebot.types import Message as TelebotMessage, ForceReply
 
-from telegram_bot.types.keyboard import InlineKeyboard
+from telegram_bot.types.keyboard import InlineKeyboard, ReplyKeyboard
 from telegram_bot.utils.classes import set_locals
-
 
 class ResponseMessage(object):
     destination_key = 'chat'
@@ -35,6 +34,29 @@ class ResponseMessage(object):
         self.reply_markup = InlineKeyboard(self.message.main)
         return self.reply_markup
 
+    def _reply_function(self, function):
+        def validate_msg(message):
+            return message.chat.id == self.message.chat.id
+        handler_dict = self.main.bot._build_handler_dict(None, func=validate_msg, content_types=['text'])
+
+        def wrapper(msg):
+            self.main.bot.message_handlers.remove(handler_dict)
+            if msg.text.startswith('/'):
+                return
+            msg = Message.from_telebot_message(self.main, msg)
+            function(msg)
+        handler_dict['function'] = wrapper
+        self.main.bot.add_message_handler(handler_dict)
+
+    def force_reply(self, function, selective=False):
+        self._reply_function(function)
+        self.reply_markup = ForceReply(selective)
+
+    def reply_keyboard(self, function, row_width=2):
+        self._reply_function(function)
+        self.reply_markup = ReplyKeyboard(row_width)
+        return self.reply_markup
+
     def send(self):
         chat_id = self.chat_id or self.get_destination_id()
         self.main.bot.send_message(chat_id, self.text, disable_web_page_preview=self.disable_web_page_preview,
@@ -61,7 +83,7 @@ class Message(TelebotMessage):
 
     def send_response(self, text, disable_web_page_preview=None, reply_to_message_id=None, reply_markup=None,
                       parse_mode=None, disable_notification=None, destination_key='chat'):
-        return self.response(self, disable_web_page_preview=disable_web_page_preview,
+        return self.response(text, disable_web_page_preview=disable_web_page_preview,
                              reply_to_message_id=reply_to_message_id, reply_markup=reply_markup,
                              parse_mode=parse_mode, disable_notification=disable_notification,
                              destination_key=destination_key).send()

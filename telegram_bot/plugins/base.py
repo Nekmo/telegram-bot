@@ -11,6 +11,7 @@ class Registering(RegisteringMeta):
 class PluginBase(metaclass=Registering):
     def __init__(self, main):
         self.main = main
+        self.db = main.db
         self.bot = main.bot
         self.register_button_targets()
 
