@@ -35,18 +35,12 @@ class ResponseMessage(object):
         return self.reply_markup
 
     def _reply_function(self, function):
-        def validate_msg(message):
-            return message.chat.id == self.message.chat.id
-        handler_dict = self.main.bot._build_handler_dict(None, func=validate_msg, content_types=['text'])
-
         def wrapper(msg):
-            self.main.bot.message_handlers.remove(handler_dict)
             if msg.text.startswith('/'):
                 return
             msg = Message.from_telebot_message(self.main, msg)
             function(msg)
-        handler_dict['function'] = wrapper
-        self.main.bot.add_message_handler(handler_dict)
+        self.main.bot.register_next_step_handler(self.message, wrapper)
 
     def force_reply(self, function, selective=False):
         self._reply_function(function)
