@@ -30,8 +30,8 @@ class ResponseMessage(object):
     def get_destination_id(self):
         return getattr(self.message, self.destination_key).id
 
-    def inline_keyboard(self):
-        self.reply_markup = InlineKeyboard(self.message.main)
+    def inline_keyboard(self, row_width=3):
+        self.reply_markup = InlineKeyboard(self.message.main, row_width)
         return self.reply_markup
 
     def _reply_function(self, function):
