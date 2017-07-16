@@ -23,7 +23,7 @@ AUTHOR = 'Nekmo'
 EMAIL = 'contacto@nekmo.com'
 
 # Información del paquete
-PACKAGE_NAME = 'telegram-bot'
+PACKAGE_NAME = 'tg-bot'
 PACKAGE_DOWNLOAD_URL = 'https://github.com/Nekmo/telegram-bot/archive/master.zip'  # .tar.gz
 URL = 'https://github.com/Nekmo/telegram-bot'  # Project url
 STATUS_LEVEL = 1  # 1:Planning 2:Pre-Alpha 3:Alpha 4:Beta 5:Production/Stable 6:Mature 7:Inactive
