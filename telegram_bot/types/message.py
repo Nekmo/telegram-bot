@@ -53,9 +53,9 @@ class ResponseMessage(object):
 
     def send(self):
         chat_id = self.chat_id or self.get_destination_id()
-        self.main.bot.send_message(chat_id, self.text, disable_web_page_preview=self.disable_web_page_preview,
-                                   reply_to_message_id=self.reply_to_message_id, reply_markup=self.reply_markup,
-                                   parse_mode=self.parse_mode, disable_notification=self.disable_notification)
+        return self.main.bot.send_message(chat_id, self.text, disable_web_page_preview=self.disable_web_page_preview,
+                                          reply_to_message_id=self.reply_to_message_id, reply_markup=self.reply_markup,
+                                          parse_mode=self.parse_mode, disable_notification=self.disable_notification)
 
 
 class Message(TelebotMessage):
